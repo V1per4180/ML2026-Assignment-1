@@ -3,6 +3,15 @@ import numpy as np
 from model import Model
 
 
+# 全局对数据列的分类（不包含age）
+NUMERIC_COLUMNS = ("balance", "day", "duration", "campaign", "pdays", "previous")
+CATEGORICAL_COLUMNS = (
+    "job", "marital", "education", "default", "housing",
+    "loan", "contact", "month", "poutcome",
+)
+
+TRAIN_PATH = "train.csv"
+
 class Solution:
     def __init__(self):
         """
@@ -15,33 +24,79 @@ class Solution:
         self.model.weights = np.random.randn(n_features) * 0.01
         self.model.bias = np.random.randn() * 0.01
 
-        self.X_mean = np.zeros(n_features)
-        self.X_std = np.ones(n_features)
+        self.means = np.zeros(n_features)
+        self.stds = np.ones(n_features)
 
-    def forward(self, sample: dict) -> dict:
+        self.fit()
+
+    def fit(self):
         """
-        单样本推理接口
+        读取训练数据集，完成数据预处理和训练。
+        """
+        # 读取数据，不需要使用 ID 列
+        columns = list(NUMERIC_COLUMNS + CATEGORICAL_COLUMNS) + ['age']
+        train = pd.read_csv(TRAIN_PATH, usecols=columns)
 
+        # 处理数据，得到最终训练使用的X和y
+        y_train = train['age'].to_numpy(dtype=np.float64)
+        X_train = self.preprocess(train, fit=True)
+        self.model = Model().fit(X_train,y_train)
+
+    def preprocess(self, data:pd.DataFrame, fit=False):
+        """
+        对数据集进行预处理
         Args:
-            sample: 包含单个样本特征的字典（不包含age列）
-
-        Returns:
-            dict: 包含'prediction'键的字典，值为预测的年龄
+            fit: 在训练时/测试时使用
         """
-        sample_df = pd.DataFrame([sample])
+        
+        # 取出数值型特征，做标准化
+        numeric = data[list(NUMERIC_COLUMNS)].apply(pd.to_numeric, errors="coerce")
 
-        # The evaluator supplies the 15 features; id and age are excluded.
-        X = sample_df.drop(columns=['id', 'age'], errors='ignore')
+        # 新增："以前是否联系过"，因为没联系过与普通的天数含义不同（from gpt）
+        numeric["has_previous_contact"] = (numeric["pdays"]>=0).astype(float)
+        # 把原来的"pdays"中未联系过直接用0来表示，以区分状态
+        numeric["pdays"] = numeric["pdays"].clip(lower=0)
 
-        for col in X.columns:
-            if X[col].dtype == 'object':
-                X[col] = pd.factorize(X[col])[0]
+        # 新增：余额和练习时长的对数特征(from gpt)
+        numeric["balance_log"] = (
+            np.sign(numeric["balance"])
+            * np.log1p(numeric["balance"].abs())
+        )
 
-        X = X.values.astype(float)
-        X = np.nan_to_num(X, nan=0.0)
+        # 新增：duration 的对数特征(from gpt)
+        numeric["duration_log"] = np.log1p(
+            numeric["duration"].clip(lower=0)
+        )
 
-        X_scaled = (X - self.X_mean) / self.X_std
 
-        prediction = self.model.predict(X_scaled)[0]
+        # 做标准化，测试集内缺失的数据用训练集的补
+        if fit:
+            self.means = numeric.mean().fillna(0)
+        numeric = numeric.fillna(self.means)
+
+        if fit:
+            self.stds = numeric.std(ddof=0).replace(0,1)
+        numeric = (numeric - self.means) / self.stds
+
+        # 取出类别型特征，做独热编码
+        categorical = pd.get_dummies(
+            data[list(CATEGORICAL_COLUMNS)],
+            columns=list(CATEGORICAL_COLUMNS),
+            prefix_sep="=",
+            dtype=float,
+        )
+
+        # 拼接处理好的数值型特征和类别型特征
+        features = pd.concat([numeric, categorical], axis=1)
+        if fit:
+            self.feature_names = features.columns.tolist()
+
+        return features.reindex(columns=self.feature_names, fill_value=0.0)
+    
+    def forward(self, sample: dict) -> dict:
+        """输入特征，输出年龄预测值"""
+        sample = pd.DataFrame([sample])
+        X = self.preprocess(sample)
+        prediction = float(self.model.predict(X)[0])
 
         return {'prediction': float(prediction)}

@@ -1,0 +1,32 @@
+{
+  "assignment": "ML2026-Assignment-1",
+  "evaluator_version": "2026.2.0",
+  "timestamp": "2026-10-18T20:27:22",
+  "student": {
+    "id": "",
+    "name": ""
+  },
+  "test_file": {
+    "name": "test_public.csv",
+    "md5": "212e0fd2acefcfef62a3d876fc19bb35",
+    "rows": 50000
+  },
+  "metrics": {
+    "mae": 6.312312,
+    "mse": 60.131953,
+    "rmse": 7.75448
+  },
+  "prediction_time_s": 847.474,
+  "training_and_setup_time_s": 1.408,
+  "total_worker_time_s": 848.882,
+  "code_md5": {
+    "solution.py": "67e7cc7f363a9f9adda1d3fcbb8aab2e",
+    "model.py": "54e60cb4e6dfc407c7a6236209f75923"
+  },
+  "code_sha256": {
+    "solution.py": "84564155855b9a8407fd2a999ac49a1f902bf0798bf6b9a64c993bc0e6a16e9e",
+    "model.py": "cf0373ea986680ae0a6be7792e136dc90946ee655fc556dce38b60bdfd3a16fd"
+  },
+  "python_version": "3.11.17",
+  "platform": "Windows-10-10.0.26200-SP0"
+}
