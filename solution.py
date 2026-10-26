@@ -81,7 +81,7 @@ class Solution:
         # 取出类别型特征，做独热编码
         category_data = data[list(CATEGORICAL_COLUMNS)].copy()
 
-        # 对 job 和 education 做交叉
+        # 对 job 和 education 做交叉（from gpt）
         category_data["job+education"] = (
             category_data["job"].fillna("unknown").astype(str)
             + "|"

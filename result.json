@@ -1,10 +1,10 @@
 {
   "assignment": "ML2026-Assignment-1",
   "evaluator_version": "2026.2.0",
-  "timestamp": "2026-10-18T22:57:50",
+  "timestamp": "2026-10-26T08:46:11",
   "student": {
-    "id": "",
-    "name": ""
+    "id": "51295903105",
+    "name": "奚震尧"
   },
   "test_file": {
     "name": "test_public.csv",
@@ -16,9 +16,9 @@
     "mse": 59.630849,
     "rmse": 7.722101
   },
-  "prediction_time_s": 915.564,
-  "training_and_setup_time_s": 2.219,
-  "total_worker_time_s": 917.784,
+  "prediction_time_s": 902.556,
+  "training_and_setup_time_s": 3.418,
+  "total_worker_time_s": 905.973,
   "code_md5": {
     "solution.py": "f8b6b181db383e06996c8fc683e2b0c4",
     "model.py": "3d2671331c4b299d6d0dd83e971f2899"
