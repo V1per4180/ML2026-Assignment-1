@@ -43,3 +43,4 @@ Thumbs.db
 *.bak
 
 shap_results
+image*
