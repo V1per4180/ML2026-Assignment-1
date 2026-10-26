@@ -79,19 +79,41 @@ class Solution:
         numeric = (numeric - self.means) / self.stds
 
         # 取出类别型特征，做独热编码
+        category_data = data[list(CATEGORICAL_COLUMNS)].copy()
+
+        # 对 job 和 education 做交叉
+        category_data["job+education"] = (
+            category_data["job"].fillna("unknown").astype(str)
+            + "|"
+            + category_data["education"].fillna("unknown").astype(str)
+        )
+
+        # 对 default + housing + loan 做交叉
+        category_data["default+housing+loan"] = (
+            category_data["default"].fillna("unknown").astype(str)
+            + "|"
+            + category_data["housing"].fillna("unknown").astype(str)
+            + "|"
+            + category_data["loan"].fillna("unknown").astype(str)
+        )
+
+        # 对类别型特征做独热编码
         categorical = pd.get_dummies(
-            data[list(CATEGORICAL_COLUMNS)],
-            columns=list(CATEGORICAL_COLUMNS),
-            prefix_sep="=",
-            dtype=float,
+            category_data, columns=category_data.columns.tolist(),
+            prefix_sep="=", dtype=float
         )
 
         # 拼接处理好的数值型特征和类别型特征
         features = pd.concat([numeric, categorical], axis=1)
+
         if fit:
             self.feature_names = features.columns.tolist()
+            return features
 
-        return features.reindex(columns=self.feature_names, fill_value=0.0)
+        return features.reindex(
+            columns=self.feature_names,
+            fill_value=0.0,
+        )
     
     def forward(self, sample: dict) -> dict:
         """输入特征，输出年龄预测值"""

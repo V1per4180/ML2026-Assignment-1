@@ -1,7 +1,7 @@
 {
   "assignment": "ML2026-Assignment-1",
   "evaluator_version": "2026.2.0",
-  "timestamp": "2026-10-18T20:27:22",
+  "timestamp": "2026-10-18T22:57:50",
   "student": {
     "id": "",
     "name": ""
@@ -12,20 +12,20 @@
     "rows": 50000
   },
   "metrics": {
-    "mae": 6.312312,
-    "mse": 60.131953,
-    "rmse": 7.75448
+    "mae": 6.270837,
+    "mse": 59.630849,
+    "rmse": 7.722101
   },
-  "prediction_time_s": 847.474,
-  "training_and_setup_time_s": 1.408,
-  "total_worker_time_s": 848.882,
+  "prediction_time_s": 915.564,
+  "training_and_setup_time_s": 2.219,
+  "total_worker_time_s": 917.784,
   "code_md5": {
-    "solution.py": "67e7cc7f363a9f9adda1d3fcbb8aab2e",
-    "model.py": "54e60cb4e6dfc407c7a6236209f75923"
+    "solution.py": "f8b6b181db383e06996c8fc683e2b0c4",
+    "model.py": "3d2671331c4b299d6d0dd83e971f2899"
   },
   "code_sha256": {
-    "solution.py": "84564155855b9a8407fd2a999ac49a1f902bf0798bf6b9a64c993bc0e6a16e9e",
-    "model.py": "cf0373ea986680ae0a6be7792e136dc90946ee655fc556dce38b60bdfd3a16fd"
+    "solution.py": "85114c3b61f5a3b0364208b0059c4ef7525629027d325368c5e32dca2b3e40d9",
+    "model.py": "8b7cceb99d4f6444833e7be0ac788b72bda2b7efa18470b631988a5b908c095f"
   },
   "python_version": "3.11.17",
   "platform": "Windows-10-10.0.26200-SP0"

@@ -2,7 +2,7 @@ import numpy as np
 
 """多元线性回归模型的实现"""
 class Model:
-    def __init__(self, alpha=10.0):
+    def __init__(self, alpha=1.0):
         """
         初始化线性回归模型：weights 权重矩阵 和 bias 偏执
         预测：y_hat = X @ weights + bias
