@@ -42,5 +42,8 @@ Thumbs.db
 *.tmp
 *.bak
 
+# 其他自己加的
 shap_results
 image*
+test_public.csv
+train.csv
